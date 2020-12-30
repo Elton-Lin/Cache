@@ -10,6 +10,7 @@ API
     - resize: change the capacity of a cache (not realisitc for a physical cache, but can be useful in a software cache)
     - print: prints the content of cache in CL (debugging, aid understanding)
     - I/O: import and export cache content as json? (saving cache to a persistent storage)
+    - get_count?
 
 - exception handling
     - key not exist

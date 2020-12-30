@@ -21,6 +21,7 @@ class lfu : public cache<Key, T> {
         return T();
     }
     void put(Key k, T val) override {
+        cache::m_size += 1;
         return;
     }
     

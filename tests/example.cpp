@@ -1,6 +1,8 @@
 #include <libcache/lfu.hpp> // relative path used in Makefile
 #include <iostream>
 
+// g++ -std=c++14 -I ../ example.cpp -o example.out
+
 int main() {
 
     auto cache = lfu<int, int>(5);
