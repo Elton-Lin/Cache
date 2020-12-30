@@ -13,11 +13,20 @@ class cache {
     virtual void print() = 0;
     virtual void resize(std::size_t new_capacity) = 0;
 
-    protected:
-    std::size_t size;
-    std::size_t capacity;
+    size_t size() {
+        return m_size;
+    }
+    
+    size_t capacity() {
+        return m_capacity;
+    }
 
-    cache(std::size_t _capacity) : capacity(_capacity) {};
+    protected:
+    std::size_t m_size;
+    std::size_t m_capacity;
+
+    // cache() : capacity(0) {};
+    cache(std::size_t _capacity) : m_capacity(_capacity) {};
     // ~ cahce() {}; // virtual?
 
 };

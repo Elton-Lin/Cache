@@ -33,3 +33,9 @@ Testing
 - unit testing
 - use gtest?
 
+
+project fs structure
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1204r0.html
+
+others:
+set up cmake to better organize the project (paths  and dependencies easier to manage)
