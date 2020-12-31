@@ -34,6 +34,7 @@ class lru : public cache<Key, T, Hash, Eq> {
         if (cache::entries_map.find(k) != cache::entries_map.end()) {
             // updating exisitng key
             cache::entries_map[k] = val;
+            touch(k);
             return;
         }
 
@@ -47,7 +48,7 @@ class lru : public cache<Key, T, Hash, Eq> {
         cache::entries_map.insert(std::make_pair(k, val));
     }
     
-    
+
     void print() override {
         std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
                   << "key: value\n";

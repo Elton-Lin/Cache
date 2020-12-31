@@ -58,6 +58,20 @@ TEST_CASE("LRU cache standard operations", "[cache::lru]") {
         REQUIRE(c.get("D") == 42);
         REQUIRE(c.size() == CACHE_SIZE);
     }
+
+    SECTION("LRU cache updating values, order should also update") {
+        // access order is
+        // A, B, C, D
+    
+        c.put("A", 111);
+        // access order should now be
+        // B, C, D, A
+
+        // evicting "B" because it is the LRU
+        c.put("E", 5);
+        REQUIRE_THROWS_AS(c.get("B"), std::out_of_range);
+        REQUIRE(c.get("A") == 111);
+    }
     
     SECTION("LRU cache thrashing-ish") {
         std::string cur_letters = "ABCD";
