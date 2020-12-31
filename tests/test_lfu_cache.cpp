@@ -60,7 +60,7 @@ TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
     
     SECTION("LFU cache thrashing-ish") {
         std::string letters = "ZYXWVUTSRQ";
-        c.put(letters[0], 0);
+        c.put(std::string(1, letters[0]), 0);
         REQUIRE_THROWS_AS(c.get("E"), std::out_of_range);
 
         // count for "Z" is 1

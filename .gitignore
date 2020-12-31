@@ -2,3 +2,6 @@
 .DS_Store*
 *.out
 notes*
+*.dSYM/
+test_*_runner
+example
