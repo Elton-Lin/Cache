@@ -3,6 +3,7 @@
 #include <libcache/lru.hpp> // relative path used in Makefile
 
 #include <string>
+#include <iostream>
 
 // g++ -std=c++14 -I ../ test_lru_cache.cpp -o test_lru.out
 
@@ -14,11 +15,12 @@ TEST_CASE("LRU cache standard operations", "[cache::lru]") {
     REQUIRE(c.size() == 0);
     REQUIRE(c.capacity() == CACHE_SIZE);
 
+    c.put("A", 1);
+    c.put("B", 2);
+    c.put("C", 3);
+    c.put("D", 4);
+
     SECTION("LRU cache is within capacity") {
-        c.put("A", 1);
-        c.put("B", 2);
-        c.put("C", 3);
-        c.put("D", 4);
         REQUIRE(c.size() == CACHE_SIZE);
 
         // verify the existence and value
@@ -29,9 +31,8 @@ TEST_CASE("LRU cache standard operations", "[cache::lru]") {
     }
 
     SECTION("LRU cache is full, eviction is performed") {
-        // this left "B" to be the least recently used
+        // this makes "B" the least recently used
         // even though it is accessed many times
-        c.get("B");
         c.get("B");
         c.get("B");
         c.get("A");
@@ -45,24 +46,21 @@ TEST_CASE("LRU cache standard operations", "[cache::lru]") {
         REQUIRE(c.size() == CACHE_SIZE);
 
         // scramble counts
-
     }
 
-    SECTION("LRU cache updating values") {
+    SECTION("LRU cache updating values, no eviction should take place") {
 
         c.put("C", 30);
         c.put("D", 42);
+        REQUIRE(c.get("A") == 1);
+        REQUIRE(c.get("B") == 2);
         REQUIRE(c.get("C") == 30);
         REQUIRE(c.get("D") == 42);
         REQUIRE(c.size() == CACHE_SIZE);
-
-        // current access order
-        // A, E, C, D
-        // A is the LRU
     }
     
     SECTION("LRU cache thrashing-ish") {
-        std::string cur_letters = "AECD";
+        std::string cur_letters = "ABCD";
         std::string new_letters = "ZYXW";
 
         for (int i = 0; i < 4; ++i) {
