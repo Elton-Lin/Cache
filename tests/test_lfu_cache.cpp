@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include <libcache/lfu.hpp> // relative path used in Makefile
 
+#include <random>
 #include <string>
 
 // g++ -std=c++14 -I ../ test_lfu_cache.cpp -o test_lfu.out
@@ -43,6 +44,17 @@ TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
         REQUIRE_THROWS_AS(c.get("B"), std::out_of_range);
         REQUIRE(c.size() == CACHE_SIZE);
 
+        // // all counts to 3
+        c.get("A");
+        c.get("C");
+        c.get("D");
+        c.get("E");
+
+        // // evicting any of A, C, D, E
+        c.put("F", 6);
+        REQUIRE(c.get("F") == 6);
+        REQUIRE(c.size() == CACHE_SIZE);
+
         // scramble counts
     }
 
@@ -59,7 +71,7 @@ TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
 
     SECTION("LFU cache updating values, order should also update") {
 
-        // freq counts are all 1 bt now
+        // freq counts are all 1 by now
         // making freq counts all 2 except B
         c.put("A", 123);
         c.put("C", 456);
@@ -69,6 +81,17 @@ TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
         c.put("E", 5);
         REQUIRE_THROWS_AS(c.get("B"), std::out_of_range);
         REQUIRE(c.get("A") == 123);
+    }
+
+    SECTION("LFU cache insert to both existing and new frequency counts") {
+        c.get("A"); // creates '2' bucket and "A" moves from '1' to '2'
+        c.get("B"); // "B" moves from '1' to existing '2' bucket
+
+        c.get("A"); // creates '3'
+        c.get("A"); // creates '4'
+
+        c.put("E", 5); // evicts 'C' or 'D'
+        // A: 4, B: 2, C: 1, D: 1
     }
     
     SECTION("LFU cache thrashing-ish") {
@@ -95,6 +118,35 @@ TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
         REQUIRE(c.get("B") == 2);
         REQUIRE(c.get("C") == 3);
         REQUIRE(c.size() == CACHE_SIZE);
+    }
+
+    SECTION("LFU cache fuzzy test") {
+        std::string letters = "ZYXWVU";
+        std::vector<int> values = {5, 4, 3, 2, 1, 0};
+
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_int_distribution<> distrib(0, 5);
+
+        for (int i = 0; i < 10; ++i) {
+            int op = distrib(gen), index = distrib(gen);
+            std::string s(1, letters[index]);
+            int val = values[index];
+
+            if (op % 2) {
+                c.put(s, val);
+                REQUIRE(c.get(s) == val);
+            }
+            else {
+                try {
+                    int v = c.get(s);
+                    REQUIRE(v == val);
+                }
+                catch (std::out_of_range e){
+
+                }
+            }
+        }
     }
     
 
