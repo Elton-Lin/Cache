@@ -3,7 +3,6 @@
 #include <libcache/lru.hpp> // relative path used in Makefile
 
 #include <string>
-#include <iostream>
 
 // g++ -std=c++14 -I ../ test_lru_cache.cpp -o test_lru.out
 
@@ -61,11 +60,11 @@ TEST_CASE("LRU cache standard operations", "[cache::lru]") {
 
     SECTION("LRU cache updating values, order should also update") {
         // access order is
-        // A, B, C, D
+        // A, B, C, D (lru to mru)
     
         c.put("A", 111);
         // access order should now be
-        // B, C, D, A
+        // B, C, D, A (lru to mru)
 
         // evicting "B" because it is the LRU
         c.put("E", 5);

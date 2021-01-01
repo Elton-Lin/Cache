@@ -2,9 +2,8 @@
 #define _LRU_SW_CACHE_H
 
 #include "cache.hpp"
-#include <list>
-
 #include <iostream>
+#include <list>
 
 template<typename Key, typename T, 
         typename Hash = std::hash<Key>, 
@@ -12,7 +11,7 @@ template<typename Key, typename T,
 class lru : public cache<Key, T, Hash, Eq> {
 
     using cache = cache<Key, T, Hash, Eq>;
-    using list_iter = typename std::list<Key>::iterator;
+    using list_iter_t = typename std::list<Key>::iterator;
 
     public:
 
@@ -65,7 +64,7 @@ class lru : public cache<Key, T, Hash, Eq> {
                 evict();
             }
         }
-        cache::m_capacity = new_capacity;
+        cache::cache_capacity = new_capacity;
     }
 
     private:
@@ -74,11 +73,11 @@ class lru : public cache<Key, T, Hash, Eq> {
     // (the least recently used is always at the end)
     std::list<Key> lru_queue;
     // Maps entry key to iterator (points to entry node in list)
-    std::unordered_map<Key, list_iter, Hash, Eq> node_map;
+    std::unordered_map<Key, list_iter_t, Hash, Eq> node_map;
 
     void touch(const Key &k) {
         // Move entry to the front (most recently used) of queue
-        list_iter entry_it = node_map[k];
+        list_iter_t entry_it = node_map[k];
         lru_queue.splice(lru_queue.begin(), lru_queue, entry_it);
     }
 

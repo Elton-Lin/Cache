@@ -21,15 +21,15 @@ class cache {
     }
     
     size_t capacity() {
-        return m_capacity;
+        return cache_capacity;
     }
 
     protected:
     
-    std::size_t m_capacity;
+    std::size_t cache_capacity;
     std::unordered_map<Key, T, Hash, Eq> entries_map;
 
-    cache(std::size_t _capacity) : m_capacity(_capacity) {};
+    cache(std::size_t _capacity) : cache_capacity(_capacity) {};
     // ~ cahce() {}; // virtual?
 
 };
