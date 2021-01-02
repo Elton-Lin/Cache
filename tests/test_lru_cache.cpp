@@ -9,7 +9,7 @@
 TEST_CASE("LRU cache standard operations", "[cache::lru]") {
 
     const int CACHE_SIZE = 4;
-    lru<std::string, int> c(CACHE_SIZE);
+    caches::lru<std::string, int> c(CACHE_SIZE);
 
     REQUIRE(c.size() == 0);
     REQUIRE(c.capacity() == CACHE_SIZE);

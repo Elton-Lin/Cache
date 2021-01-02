@@ -3,6 +3,8 @@
 
 #include <cstddef> // size_t
 
+namespace caches {
+
 template<typename Key, typename T>
 class cache {
 
@@ -27,5 +29,6 @@ class cache {
     // ~ cahce() {}; // virtual?
 
 };
+} // namespace caches
 
 #endif

@@ -6,6 +6,9 @@
 #include <list>
 #include <unordered_map>
 
+
+namespace caches {
+
 template<typename Key, typename T, 
         typename Hash = std::hash<Key>, 
         typename Eq = std::equal_to<Key> >
@@ -102,7 +105,7 @@ class lfu : public cache<Key, T> {
     // Doubly-linked list storing frequency buckets in increasing order
     // Each bucket stores a doubly-linked list of cache entries
     std::list<FreqBucket> lfu_queue;
-    std::unordered_map<Key, entry_iter> node_map;
+    std::unordered_map<Key, entry_iter, Hash> node_map;
 
 
     // Increment the freq count for this entry
@@ -150,5 +153,6 @@ class lfu : public cache<Key, T> {
     }
 
 };
+} // namespace caches
 
 #endif

@@ -6,6 +6,8 @@
 #include <list>
 #include <unordered_map>
 
+namespace caches {
+
 template<typename Key, typename T, 
         typename Hash = std::hash<Key>, 
         typename Eq = std::equal_to<Key> >
@@ -54,11 +56,11 @@ class lru : public cache<Key, T> {
     
 
     void print() override {
-        std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
-                  << "key: value\n";
-        for (const CacheEntry &ent :lru_queue) {
-            std::cout << ent.entry_k << ": " << ent.entry_val << "\n";
-        }
+        // std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
+        //           << "key: value\n";
+        // for (const CacheEntry &ent :lru_queue) {
+        //     std::cout << ent.entry_k << ": " << ent.entry_val << "\n";
+        // }
     }
 
 
@@ -83,7 +85,7 @@ class lru : public cache<Key, T> {
     // (the least recently used is always at the end)
     std::list<CacheEntry> lru_queue;
     // Maps entry key to iterator (points to entry node in list)
-    std::unordered_map<Key, entry_iter> node_map;
+    std::unordered_map<Key, entry_iter, Hash> node_map;
 
     void touch(const Key &k) {
         // Move entry to the front (most recently used) of queue
@@ -97,5 +99,6 @@ class lru : public cache<Key, T> {
     }
 
 };
+} // namespace cache
 
 #endif

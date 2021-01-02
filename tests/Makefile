@@ -1,6 +1,4 @@
-CC=g++ -g -std=c++14 -Wall -I ../
-
-all: example
+CC=g++ -g -std=c++14 -Wall -Werror -I ../
 
 EXAMPLE_SRC=example.cpp
 
@@ -17,4 +15,4 @@ test_%: test_%.cpp
 	${CC} -o $@_runner $^ -ldl
 
 clean:
-	rm -f ${EXAMPLE_OBJS} example
+	rm -f test_*_runner example

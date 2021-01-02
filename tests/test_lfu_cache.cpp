@@ -10,7 +10,7 @@
 TEST_CASE("LFU cache standard operations", "[cache::lfu]") {
 
     const int CACHE_SIZE = 4;
-    lfu<std::string, int> c(CACHE_SIZE);
+    caches::lfu<std::string, int> c(CACHE_SIZE);
 
     REQUIRE(c.size() == 0);
     REQUIRE(c.capacity() == CACHE_SIZE);
