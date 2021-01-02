@@ -55,13 +55,13 @@ class lru : public cache<Key, T> {
     }
     
 
-    void print() override {
+    // void print() override {
         // std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
         //           << "key: value\n";
         // for (const CacheEntry &ent :lru_queue) {
         //     std::cout << ent.entry_k << ": " << ent.entry_val << "\n";
         // }
-    }
+    // }
 
 
     void resize(std::size_t new_capacity) override {

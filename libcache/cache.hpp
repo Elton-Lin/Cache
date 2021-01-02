@@ -12,7 +12,8 @@ class cache {
     virtual T get(const Key &k) = 0;
     virtual void put(const Key &k, const T &val) = 0;
     
-    virtual void print() = 0;
+    // stdout requires operator>> overload for custom types
+    // virtual void print() = 0;
     virtual void resize(std::size_t new_capacity) = 0;
 
     virtual std::size_t size() = 0;
@@ -26,7 +27,6 @@ class cache {
     std::size_t cache_capacity;
 
     cache(std::size_t _capacity) : cache_capacity(_capacity) {};
-    // ~ cahce() {}; // virtual?
 
 };
 } // namespace caches

@@ -65,16 +65,16 @@ class lfu : public cache<Key, T> {
     }
 
 
-    void print() override {
-        std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
-                  << "key: value (frequency count)\n";
-        for (const FreqBucket &bucket : lfu_queue) {
-            for (const CacheEntry &ent : bucket.entries) {
-                std::cout << ent.entry_k << ": " << ent.entry_val 
-                      << "(" << bucket.freq_count <<  ")\n";
-            }
-        }
-    }
+    // void print() override {
+    //     std::cout << "---- Cache Content (in the order of mru to lru) -----\n"
+    //               << "key: value (frequency count)\n";
+    //     for (const FreqBucket &bucket : lfu_queue) {
+    //         for (const CacheEntry &ent : bucket.entries) {
+    //             std::cout << ent.entry_k << ": " << ent.entry_val 
+    //                   << "(" << bucket.freq_count <<  ")\n";
+    //         }
+    //     }
+    // }
 
 
     void resize(std::size_t new_capacity) override {
