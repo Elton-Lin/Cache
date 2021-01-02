@@ -17,9 +17,12 @@ Space complexity is O(n) for all policies.
 There are many other interesting [policies](https://en.wikipedia.org/wiki/Cache_replacement_policies); similar idea but for [pages](https://en.wikipedia.org/wiki/Page_replacement_algorithm)
 
 ## Features
-- Supports standard cache operations: get, put. And they have optimal big-oh runtime.
-- Supports custom (user-defined) types as key and/or value. Similarly to ``std::unordered_map``, ``operator==`` overload and a hash functor on the custom type are required.
-- Supports resize. (reasoning: it's unrealistic to resize a physical cache, but it could be useful and more flexible for a software based cache)
+- Supports standard cache operations: get, put
+    - Both have optimal big-oh runtime: O(1)
+- Supports custom (user-defined) types as key and/or value
+   - Similarly to ``std::unordered_map``, ``operator==`` overload and a hash functor on the custom type are required.
+- Supports resize
+    - It's unrealistic to resize a physical cache, but it could be useful and more flexible for a software based cache
 - Well tested (framework used: [Catch](https://github.com/catchorg/Catch2/tree/v2.x)). Tests are available [here](https://github.com/Elton-Lin/libcache/tree/master/tests)
 
 
