@@ -19,17 +19,17 @@ There are many other interesting [policies](https://en.wikipedia.org/wiki/Cache_
 ## Features
 - Supports standard cache operations: get, put
     - Both have optimal big-oh runtime: O(1)
-- Supports custom (user-defined) types as key and/or value
-   - Similarly to ``std::unordered_map``, ``operator==`` overload and a hash functor on the custom type are required.
+- Supports custom (user-defined) types as key and/or value using templates
+   - Like ``std::unordered_map``, ``operator==`` overload and hash functor on the custom type are required.
 - Supports resize
-    - It's unrealistic to resize a physical cache, but it could be useful and more flexible for a software based cache
+    - It's unrealistic to resize a physical cache, but it could be useful for a software based cache
 - Well tested (framework used: [Catch](https://github.com/catchorg/Catch2/tree/v2.x)). Tests are available [here](https://github.com/Elton-Lin/libcache/tree/master/tests)
 
 
 ## Usage
 See [example.cpp](https://github.com/Elton-Lin/libcache/blob/master/tests/example.cpp) for a more complete example, which includes a demo of using custom type as key.
 ```cpp
-#include "lru.hpp"
+#include "lfu.hpp"
 
 void foo(...) {
     caches::lfu<int, int> cache(4);
@@ -42,11 +42,11 @@ void foo(...) {
     // Expected stdout: 333, 55
     std::cout << cache.get(3) << ", " << cache.get(5) << std::endl;
     
-    // resizing down causes eviction
+    // resizing down causes eviction, '1' will be evicted because it is the LFU
     cache.resize(2);
     
-    // This call will cause an error to be thrown
-    // '2' is the LFU, should've been evicted due to resize
+    // This call will cause an exception to be thrown because
+    // '1' is not in the cache anymore
     cache.get(1);
 }
 ```
