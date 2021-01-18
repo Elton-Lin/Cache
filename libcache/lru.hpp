@@ -12,9 +12,9 @@ namespace caches {
 template<typename Key, typename T, 
         typename Hash = std::hash<Key>, 
         typename Eq = std::equal_to<Key> >
-class lru : public cache<Key, T> {
+class lru : public cache<Key, T, Hash, Eq> {
 
-    using cache_t = cache<Key, T>;
+    using cache_t = cache<Key, T, Hash, Eq>;
     using list_iter_t = typename std::list<Key>::iterator;
 
     public:
