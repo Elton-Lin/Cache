@@ -2,32 +2,79 @@
 #define _SW_CACHE_H
 
 #include <cstddef> // size_t
+#include <unordered_map>
 
 namespace caches {
 
-template<typename Key, typename T>
+template<typename Key, typename T, 
+        typename Hash = std::hash<Key>, 
+        typename Eq = std::equal_to<Key> >
 class cache {
 
     public:
-    virtual T get(const Key &k) = 0;
-    virtual void put(const Key &k, const T &val) = 0;
-    
-    // stdout requires operator>> overload for custom types
-    // virtual void print() = 0;
-    virtual void resize(std::size_t new_capacity) = 0;
 
-    virtual std::size_t size() = 0;
+    T get(const Key &k) {
+        auto it = entry_storage.find(k);
+        if (it == entry_storage.end()) {
+            throw std::out_of_range("key not found error");
+        }
+
+        touch(k);
+        return it->second;
+    }
+
+
+    void put(const Key &k, const T &val) {
+
+        auto it = entry_storage.find(k);
+        if (it != entry_storage.end()) {
+            // update val for exisitng key
+            it->second = val;
+            touch(k);
+            return;
+        }
+        
+        if (size() >= cache::capacity()) {
+            evict();
+        }
+
+        entry_storage.insert(std::make_pair(k, val));
+        policy_put(k, val);
+    }
+
+
+    void resize(std::size_t new_capacity) {
+        size_t cap_diff = _capacity - new_capacity;
+
+        // eviction takes place when down-sizing
+        for (int i = 0; i < cap_diff; ++i) {
+            evict();
+        }
+        _capacity = new_capacity;
+    }
+
 
     std::size_t capacity() {
-        return cache_capacity;
+        return _capacity;
     }
+
+
+    std::size_t size() {
+        return entry_storage.size();
+    }
+
 
     protected:
     
-    std::size_t cache_capacity;
+    std::unordered_map<Key, T, Hash, Eq> entry_storage;
+    std::size_t _capacity;
 
-    cache(std::size_t _capacity) : cache_capacity(_capacity) {};
+    cache(std::size_t capacity_in) : _capacity(capacity_in) {};
 
+    // These functions are implemented based on the policy
+    virtual void policy_put(const Key &k, const T &val) = 0;
+    virtual void touch(const Key &k) = 0;
+    virtual void evict() = 0; // Note: must update entry_storage
 };
 } // namespace caches
 
