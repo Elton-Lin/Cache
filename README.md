@@ -63,6 +63,13 @@ The only requirement setup is a C++11 compiler.
 Contribution and questions are welcome at [issues](https://github.com/Elton-Lin/libcache/issues) and eltonlin@umich.edu. 
 Fork this repo to submit a pull request to the master branch. To implement another cache policy, visit cache.hpp to see the base class. Thanks!
 
+### Adding A New Policy
+Simply create a subclass of the base class in [cache.hpp](https://github.com/Elton-Lin/libcache/blob/master/libcache/cache.hpp). The new policy class needs to implement(override) 3 virtual functions for operating the policy and managing the internal data structures. And that's it! See tests/ for ideas to test the new cache policy.
+- policy_put(k, val): adds a new entry to cache
+- touch(k): updates the 'order' of the entry with key k (e.g. in LFU, increment its frequency count)
+- evict(): performs a single eviction on the cache
+
 ## TODO
 - [ ] Use cmake to improve organizing project structure and managing dependencies. It can also aid compiling process and time.
 - [ ] Implement other policies.
+- [ ] Thread-safe
