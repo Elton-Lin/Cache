@@ -6,7 +6,9 @@
 
 namespace caches {
 
-template<typename Key, typename T>
+template<typename Key, typename T, 
+        typename Hash = std::hash<Key>, 
+        typename Eq = std::equal_to<Key> >
 class cache {
 
     public:
@@ -64,14 +66,15 @@ class cache {
 
     protected:
     
-    std::unordered_map<Key, T> entry_storage;
+    std::unordered_map<Key, T, Hash, Eq> entry_storage;
     std::size_t _capacity;
 
     cache(std::size_t capacity_in) : _capacity(capacity_in) {};
 
+    // These functions are implemented based on the policy
     virtual void policy_put(const Key &k, const T &val) = 0;
     virtual void touch(const Key &k) = 0;
-    virtual void evict() = 0;
+    virtual void evict() = 0; // Note: must update entry_storage
 };
 } // namespace caches
 
